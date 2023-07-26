@@ -1,0 +1,95 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+button {
+  font-size: 18px;
+  padding: 15px 30px;
+  margin: 10px;
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+
+button:active {
+  background-color: #3d8b3d; /* New background color when the button is pressed */
+  transform: scale(0.95); /* Slight scale down effect when the button is pressed */
+}
+
+a {
+  display: none;
+  font-size: 18px;
+  padding: 10px 20px;
+  margin-top: 20px;
+  background-color: #337ab7;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+a:hover {
+  background-color: #286090;
+}
+
+.redDot {
+  width: 10px;
+  height: 10px;
+  background-color: #ff0000;
+  border-radius: 50%;
+  display: none;
+  margin: 0 auto;
+  margin-top: 10px;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Add a class to hide the download button by default */
+#downloadButton {
+  display: none;
+}
+
+/* Add a class to show the download button when recording stops */
+#downloadButton.show {
+  display: inline-block;
+}
+
+/* Add a class to hide the download button by default */
+#playButton {
+  display: none;
+}
+
+/* Add a class to show the download button when recording stops */
+#playButton.show {
+  display: inline-block;
+}
