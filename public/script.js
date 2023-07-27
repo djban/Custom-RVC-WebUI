@@ -12,14 +12,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const audioPlayer = document.getElementById('recordedAudio');
   const playButton = document.getElementById('playButton');
+  const convertButton = document.getElementById('convertButton');
+  const submitButton = document.getElementById('submitButton');
   
 ///////////////
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
 downloadButton.addEventListener('click', downloadAudio);
 playButton.addEventListener('click', playAudio);
+convertButton.addEventListener('click', convertAudio);
+submitButton.addEventListener('click', submitSettings);
 ///////////////
 
+async function submitSettings() {
+  const numberInputs = document.getElementsByClassName('numberInput');
+  const numbers = [];
+
+  // Iterate through all input fields and collect the numbers
+  for (const input of numberInputs) {
+    const number = input.value.trim();
+
+    // Check if the user entered a valid number
+    if (!isNaN(number)) {
+      numbers.push(Number(number));
+    }
+  }
+
+  if (numbers.length !== 3) {
+    alert('Please enter three valid numbers');
+    return;
+  }
+
+  try {
+    // Send the numbers to the backend using a POST request
+    const response = await fetch('/saveSettings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numbers }),
+    });
+
+    if (response.ok) {
+      alert('Numbers saved successfully!');
+    } else {
+      alert('Failed to save the numbers.');
+    }
+  } catch (error) {
+    console.error('Error saving the numbers:', error);
+  }
+}
+
+function convertAudio() {
+  console.log('convert button pressed');
+  if (isRecording) return;
+
+}
 
 function startRecording() {
   console.log('start button pressed')
@@ -74,6 +122,8 @@ function startRecording() {
 
       downloadButton.classList.add('show'); // Show the download button when recording stops
       playButton.classList.add('show'); 
+      convertButton.classList.add('show'); 
+      submitButton.classList.add('show');
     };
 
     mediaRecorder.start();
@@ -88,6 +138,9 @@ function startRecording() {
     stopButton.disabled = false; // Enable the "Stop Recording" button
     downloadButton.classList.remove('show'); // Hide the download button when starting recording
     playButton.classList.remove('show'); 
+    convertButton.classList.remove('show'); 
+    submitButton.classList.remove('show');
+
   });
 }
 

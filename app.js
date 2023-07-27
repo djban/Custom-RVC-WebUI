@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const app = express();
+const bodyParser = require('body-parser');
 
 
 
@@ -23,6 +24,24 @@ app.use('/recorded_audio', express.static('recorded_audio'));
 
 // Enable CORS
 app.use(cors());
+// Parse incoming JSON data
+app.use(bodyParser.json());
+
+app.post('/saveSettings', (req, res) => {
+  const numbers = req.body.numbers;
+
+  // You can perform any necessary validation or processing of the numbers here
+
+  // For this example, we'll just log the numbers to the console
+  console.log('Received numbers:', numbers);
+
+  // You can store the numbers in a database or perform any other backend operations here
+
+  // Respond with a success message
+  res.status(200).json({ message: 'Numbers saved successfully!' });
+});
+
+
 
 // Endpoint to handle audio file uploads
 app.post('/upload', upload.single('audio'), (req, res) => {

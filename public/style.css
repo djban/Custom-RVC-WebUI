@@ -93,3 +93,19 @@ a:hover {
 #playButton.show {
   display: inline-block;
 }
+
+#convertButton {
+  display: none;
+}
+
+#convertButton.show {
+  display: inline-block;
+}
+
+#submitButton {
+  display: none;
+}
+
+#submitButton.show {
+  display: inline-block;
+}
