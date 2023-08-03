@@ -109,3 +109,25 @@ a:hover {
 #submitButton.show {
   display: inline-block;
 }
+
+/* Input styles */
+input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 15%; /* Set the desired width here */
+  margin-bottom: 10px;
+}
+
+/* Center and style the numberInputs container */
+#numberInputs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px; /* Add some spacing below the input fields */
+}
+/* Add some spacing between input fields */
+.numberInput {
+  margin-right: 10px;
+}

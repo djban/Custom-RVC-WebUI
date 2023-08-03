@@ -5,6 +5,13 @@ const fs = require('fs');
 const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
+const { spawn } = require('child_process');
+let numbers = [];
+let modelName = "";
+let string = "";
+let modelInputs = {};
+
+
 
 
 
@@ -27,19 +34,6 @@ app.use(cors());
 // Parse incoming JSON data
 app.use(bodyParser.json());
 
-app.post('/saveSettings', (req, res) => {
-  const numbers = req.body.numbers;
-
-  // You can perform any necessary validation or processing of the numbers here
-
-  // For this example, we'll just log the numbers to the console
-  console.log('Received numbers:', numbers);
-
-  // You can store the numbers in a database or perform any other backend operations here
-
-  // Respond with a success message
-  res.status(200).json({ message: 'Numbers saved successfully!' });
-});
 
 
 
@@ -160,6 +154,87 @@ app.get('/listen', (req, res) => {
     });
 
   });
+
+// Endpoint to get the list of .pth files in a specified folder
+app.get('/listFiles', (req, res) => {
+  const folderName = req.query.folderName; // Get the folderName from the query parameters
+
+  // TODO: CHANGE BASED ON MACHINE
+  const folderPath = path.join('c:/Users/drago/Documents/push-to-talk-website/RVC-beta/RVC-beta0717', folderName);
+  console.log(folderPath);
+  fs.readdir(folderPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err);
+      return res.status(500).json({ error: 'Error reading directory' });
+    }
+
+    // Filter the list to include only .pth files
+    const pthFiles = files.filter((file) => path.extname(file).toLowerCase() === '.pth');
+
+    // Send the list of .pth files to the frontend
+    res.json(pthFiles);
+  });
+});
+
+function convertVoice() {
+  let finalInputs = [];
+  // TODO: Change based on machine
+  finalInputs.splice(1, 0, 'C:\Users\drago\Documents\push-to-talk-website\push-to-talk\recorded_audio\recorded_audio.webm');
+
+  console.log(finalInputs);
+
+  //runPythonScript(finalInputs);
+  
+}
+
+// Function to run the Python script with inputs
+function runPythonScript(inputs) {
+  // Replace 'pythonScript.py' with the name of your Python script
+  const pythonScript = spawn('python', ['convert.py']);
+
+  // Write the inputs to the Python script's stdin
+  pythonScript.stdin.write(inputs.join('\n'));
+  pythonScript.stdin.end();
+
+  // Handle the output from the Python script
+  pythonScript.stdout.on('data', (data) => {
+    console.log(`Python script output: ${data}`);
+    // Process the output from the Python script as needed
+  });
+
+  // Handle any errors from the Python script
+  pythonScript.stderr.on('data', (data) => {
+    console.error(`Python script error: ${data}`);
+  });
+
+  // Handle the script's exit event
+  pythonScript.on('close', (code) => {
+    console.log(`Python script exited with code ${code}`);
+  });
+}
+
+app.post('/saveSettings', (req, res) => {
+  modelInputs = req.body;
+  numbers = req.body.numbers;
+  modelName = req.body.selectedFile;
+  string = req.body.additionalString;
+
+  modelName = modelName.substring(0, modelName.length - 4);
+
+
+  // You can perform any necessary validation or processing of the numbers here
+
+  // Just log the numbers to the console
+  console.log('Received inputs:', modelInputs);
+  console.log('Received numbers:', numbers);
+  console.log("Received file: ", modelName);
+  console.log("Received string: ", string);
+
+  // You can store the numbers in a database or perform any other backend operations here
+
+  // Respond with a success message
+  res.status(200).json({ message: 'Numbers saved successfully!' });
+});
   
 // Start the server
 const PORT = 3000;

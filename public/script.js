@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const playButton = document.getElementById('playButton');
   const convertButton = document.getElementById('convertButton');
   const submitButton = document.getElementById('submitButton');
+
+
   
 ///////////////
 recordButton.addEventListener('click', startRecording);
@@ -22,6 +24,7 @@ downloadButton.addEventListener('click', downloadAudio);
 playButton.addEventListener('click', playAudio);
 convertButton.addEventListener('click', convertAudio);
 submitButton.addEventListener('click', submitSettings);
+
 ///////////////
 
 async function submitSettings() {
@@ -38,28 +41,34 @@ async function submitSettings() {
     }
   }
 
-  if (numbers.length !== 3) {
-    alert('Please enter three valid numbers');
-    return;
-  }
+  const dropdownMenu = document.getElementById('pthDropdown');
+  const selectedFile = dropdownMenu.value;
+
+  const additionalString = "Hello, this is an additional string.";
+
+  const data = {
+    numbers: numbers,
+    selectedFile: selectedFile,
+    additionalString: additionalString,
+    // Add any other data you want to send to the server here
+  };
 
   try {
-    // Send the numbers to the backend using a POST request
     const response = await fetch('/saveSettings', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ numbers }),
+      body: JSON.stringify(data)
     });
 
     if (response.ok) {
-      alert('Numbers saved successfully!');
+      console.log('Settings submitted successfully.');
     } else {
-      alert('Failed to save the numbers.');
+      console.error('Error submitting settings:', response.statusText);
     }
   } catch (error) {
-    console.error('Error saving the numbers:', error);
+    console.error('Error submitting settings:', error);
   }
 }
 
@@ -219,7 +228,44 @@ async function playAudio() {
 }
 
 
+  // Function to fetch the list of .pth files from the server
+  async function fetchPthFiles() {
+    try {
+      const response = await fetch('/listFiles?folderName=weights'); // Replace 'path/to/your/folder' with the actual folder name
+      if (response.ok) {
+        const pthFiles = await response.json();
+        return pthFiles;
+      } else {
+        console.error('Error fetching .pth files:', response.statusText);
+        return [];
+      }
+    } catch (error) {
+      console.error('Error fetching .pth files:', error);
+      return [];
+    }
+  }
 
+  // Function to populate the dropdown menu with .pth files
+  async function populateDropdownMenu() {
+    const dropdownMenu = document.getElementById('pthDropdown');
+
+    // Fetch the list of .pth files from the server
+    const pthFiles = await fetchPthFiles();
+
+    // Clear existing options
+    dropdownMenu.innerHTML = '';
+
+    // Create and append new options for each .pth file
+    pthFiles.forEach((file) => {
+      const option = document.createElement('option');
+      option.value = file;
+      option.text = file;
+      dropdownMenu.appendChild(option);
+    });
+  }
+
+  populateDropdownMenu();
 
 });
+
 
