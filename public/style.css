@@ -74,37 +74,22 @@ a:hover {
   }
 }
 
-/* Add a class to hide the download button by default */
-#downloadButton {
-  display: none;
-}
 
-/* Add a class to show the download button when recording stops */
 #downloadButton.show {
   display: inline-block;
 }
 
-/* Add a class to hide the download button by default */
-#playButton {
-  display: none;
-}
 
-/* Add a class to show the download button when recording stops */
+
 #playButton.show {
   display: inline-block;
 }
 
-#convertButton {
-  display: none;
-}
 
 #convertButton.show {
   display: inline-block;
 }
 
-#submitButton {
-  display: none;
-}
 
 #submitButton.show {
   display: inline-block;

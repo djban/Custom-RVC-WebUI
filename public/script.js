@@ -10,22 +10,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const stopButton = document.getElementById('stopButton');
   const downloadButton = document.getElementById('downloadButton');
 
-  const audioPlayer = document.getElementById('recordedAudio');
   const playButton = document.getElementById('playButton');
   const convertButton = document.getElementById('convertButton');
   const submitButton = document.getElementById('submitButton');
+  const playbackButton = document.getElementById('playbackButton');
 
-
-  
 ///////////////
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
 downloadButton.addEventListener('click', downloadAudio);
-playButton.addEventListener('click', playAudio);
+playButton.addEventListener('click', playRealAudio);
 convertButton.addEventListener('click', convertAudio);
 submitButton.addEventListener('click', submitSettings);
+playbackButton.addEventListener('click', playConvertedAudio);
+
 
 ///////////////
+
 
 async function submitSettings() {
   const numberInputs = document.getElementsByClassName('numberInput');
@@ -44,12 +45,10 @@ async function submitSettings() {
   const dropdownMenu = document.getElementById('pthDropdown');
   const selectedFile = dropdownMenu.value;
 
-  const additionalString = "Hello, this is an additional string.";
 
   const data = {
     numbers: numbers,
     selectedFile: selectedFile,
-    additionalString: additionalString,
     // Add any other data you want to send to the server here
   };
 
@@ -75,6 +74,12 @@ async function submitSettings() {
 function convertAudio() {
   console.log('convert button pressed');
   if (isRecording) return;
+
+  fetch('/convert') // Send a GET request to the /convert endpoint
+  .then(response => response.text())
+  .then(message => console.log(message))
+  .catch(error => console.error('Error:', error));
+  console.log('finished converting');
 
 }
 
@@ -125,14 +130,6 @@ function startRecording() {
       console.log('audioChunks length after push:', audioChunks.length);
       console.log(audioChunks.values());
       //////
-
-
-
-
-      downloadButton.classList.add('show'); // Show the download button when recording stops
-      playButton.classList.add('show'); 
-      convertButton.classList.add('show'); 
-      submitButton.classList.add('show');
     };
 
     mediaRecorder.start();
@@ -145,10 +142,7 @@ function startRecording() {
 
     recordButton.disabled = true; // Disable the "Start Recording" button
     stopButton.disabled = false; // Enable the "Stop Recording" button
-    downloadButton.classList.remove('show'); // Hide the download button when starting recording
-    playButton.classList.remove('show'); 
-    convertButton.classList.remove('show'); 
-    submitButton.classList.remove('show');
+
 
   });
 }
@@ -207,23 +201,24 @@ async function downloadAudio() {
 
 
 // Function to play the recorded audio
-async function playAudio() {
+async function playAudioFile(fileName) {
+  const audioPlayer = document.createElement('audio');
 
   try {
-    const latestAudio = audioChunks[audioChunks.length - 1];
-    if (!latestAudio) {
-      console.error('No audio data found.');
-      return;
+    const response = await fetch(`/listen/${fileName}`);
+    if (response.ok) {
+      const blob = await response.blob();
+      const audioURL = URL.createObjectURL(blob);
+      
+      audioPlayer.src = audioURL;
+      audioPlayer.play();
+      
+      console.log(`Playing audio: ${fileName}`);
+    } else {
+      console.error('Error fetching audio file:', response.statusText);
     }
-
-    // Create a new Audio element and set its source to the recorded audio URL
-    const audioElement = new Audio(latestAudio.url);
-
-    // Play the audio
-    audioElement.play();
-
-} catch (error) {
-  console.error('Error fetching audio file:', error);
+  } catch (error) {
+    console.error('Error playing audio:', error);
   }
 }
 
@@ -265,7 +260,14 @@ async function playAudio() {
   }
 
   populateDropdownMenu();
+  
+async function playRealAudio() {
+  playAudioFile('recorded_audio.webm');
+}
 
+async function playConvertedAudio() {
+  playAudioFile('output_sound.wav');
+}
 });
 
 
