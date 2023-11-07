@@ -23,7 +23,6 @@ Ensure that you have node installed as well. Then, inside the `push-to-talk` fol
 - Install vb virtual cable 
 - Set the default input device on windows to the Virtual cable
 - Set the input device on Discord to the virtual cable
-- 
 
 ## General Notes
 - This assumes the paths are correct and you have everything installed. In general, I've found that setting up machine learning environments as one of the hardest parts of this.
