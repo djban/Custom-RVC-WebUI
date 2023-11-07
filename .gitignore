@@ -1,0 +1,5 @@
+RVC-beta/
+node_modules/
+virtualvenv/
+hubert_base.pt
+__pycache__/
