@@ -1,0 +1,8 @@
+# Ignore hubert_base.pt in push-to-talk folder
+push-to-talk/hubert_base.pt
+
+# Ignore RVC-beta folder
+RVC-beta/
+
+# Ignore virtual environment folder
+venv/

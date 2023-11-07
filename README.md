@@ -2,9 +2,11 @@
 A website for push to talk ai conversion voices - can connect to Discord through VB virtual cable, or you can just download the .wav file yourself. Built with a server and client side.
 
 # Installation
-This requires two different folders all within one general folder. This provides the `push-to-talk` folder without the `hubert_base.py`. Make a secondary folder called `RVC-beta` and include the `RVC-beta0717` file, which can be found in the same location as the `hubert_base.py` [here](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main).
+This requires two different folders all within one general folder. This provides the `push-to-talk` folder and every other file except the `hubert_base.py` which you must download and add to the `push-to-talk` folder. Make a secondary folder called `RVC-beta` and include the `RVC-beta0717` file, which can be found in the same location as the `hubert_base.py` [here](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main).
 
 - Overall_folder
+  - __pycache
+  - recorded_audio
   - push-to-talk
     - -hubert_base.py
   - RVC-beta
