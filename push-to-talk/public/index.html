@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Push-to-Talk Translation</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+
+
+</head>
+<body>
+  <h1>Push-to-Talk Translation</h1>
+  <button id="recordButton">Start Recording</button>
+  <button id="stopButton" disabled>Stop Recording</button>
+  <div class="redDot"></div>
+  <br>
+  <br>
+  <br>
+  <button id="playButton">Play Audio</button>
+  <button id="downloadButton">Download Audio</button>
+  <br> <br>
+
+
+  <div id="numberInputs">
+    <!-- The first input field -->
+    <input type="number" class="numberInput" placeholder="Pitch">
+    <input type="number" class="numberInput" placeholder="Indexing Rate">
+
+    <label for="pthDropdown">Select a .pth file:</label>
+    <select id="pthDropdown">  </select>
+  </div>
+
+
+  <!-- Add the folder selection drop-down input -->
+
+
+  <button id="submitButton">Submit</button>
+
+  <button id = "convertButton"> Change Voice</button>
+  <br>
+  <p id="scriptStatus">Script Status: Waiting...</p>
+<br>
+<button id = "playbackButton">Play Converted Voice</button>
+<button id = "DiscordButton">Send To Discord</button>
+
+
+</body>
+</html>
