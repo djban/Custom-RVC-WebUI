@@ -6,3 +6,5 @@ RVC-beta/
 
 # Ignore virtual environment folder
 venv/
+
+push-to-talk/node_modules/

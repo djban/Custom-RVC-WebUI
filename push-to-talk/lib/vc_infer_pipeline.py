@@ -294,8 +294,11 @@ class VC(object):
         ):
             try:
                 index = faiss.read_index(file_index)
+                print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+                print(index)
                 # big_npy = np.load(file_big_npy)
                 big_npy = index.reconstruct_n(0, index.ntotal)
+                print(big_npy)
             except:
                 traceback.print_exc()
                 index = big_npy = None

@@ -32,7 +32,6 @@ class Config:
                 or "1070" in self.gpu_name
                 or "1080" in self.gpu_name
             ):
-                print("16系/10系显卡和P40强制单精度")
                 self.is_half = False
                 for config_file in ["32k.json", "40k.json", "48k.json"]:
                     with open(f"configs/{config_file}", "r") as f:
@@ -58,10 +57,10 @@ class Config:
                 with open("trainset_preprocess_pipeline_print.py", "w") as f:
                     f.write(strr)
         elif torch.backends.mps.is_available():
-            print("没有发现支持的N卡, 使用MPS进行推理")
+            print("Using mps to inference")
             self.device = "mps"
         else:
-            print("没有发现支持的N卡, 使用CPU进行推理")
+            print("Using cpu to inference")
             self.device = "cpu"
             self.is_half = True
 
