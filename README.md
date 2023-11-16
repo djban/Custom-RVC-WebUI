@@ -2,12 +2,12 @@
 A website for push to talk ai conversion voices - can connect to Discord through VB virtual cable, or you can just download the .wav file yourself. Built with a server and client side.
 
 ## Installation
-1. This requires two different folders all within one general folder. This provides the `push-to-talk` folder and every other file except the `hubert_base.py` which you must download and add to the `push-to-talk` folder. 
+1. This requires two different folders all within one general directory. This provides the `push-to-talk` folder and every other file except the `hubert_base.py` which you must download and add to the `push-to-talk` folder. 
 
 2. Make a secondary folder called `RVC-beta` and include the `RVC-beta0717` file, which can be found in the same location as the `hubert_base.py` [here](https://huggingface.co/lj1995/VoiceConversionWebUI/tree/main). Your resulting path should look like this: 
    
 
-``` -Overall_folder
+``` -Overall_directory
     -__pycache
     -recorded_audio
     -push-to-talk
@@ -19,11 +19,11 @@ A website for push to talk ai conversion voices - can connect to Discord through
     -.gitignore
 ```
 
-Ensure that your python version is under 3.11 - I used 3.10.0. Then, create a virtual environment and run `python -m venv venv`. Then run `. venv/Scripts/activate` to start the virtual environment.
+This is currently only tested on python version 3.11.4 on Windows, so make sure you have that version. Then, create a virtual environment and run `python -m venv venv`. Then run `. venv/Scripts/activate` to start the virtual environment.
 
-Then, run `pip install -r requirements.txt` from the push-to-talk folder.
+Then, run `pip install -r requirements.txt`
 
-Ensure that you have node installed as well. Then, inside the `push-to-talk` folder, run `node app.js`
+Ensure that you have node installed as well. Then, inside the `push-to-talk` directory. Then, from the `push-to-talk` directory, run `node app.js`
   
 
 ## How to use:
