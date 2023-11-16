@@ -161,9 +161,15 @@ app.get('/listFiles', (req, res) => {
 });
 
 // Runs python script which converts "recorded_audio.webm to output_sound.wav"
-app.get('/convert', (req, res) => {
-  convertVoice();
-  console.log('Voice conversion started.'); // You can send a response if needed
+app.get('/convert', async (req, res) => {
+  try {
+    await convertVoice(); // Wait for the Python script to complete
+    console.log('Voice conversion completed.');
+    res.status(200).send('Conversion completed successfully.'); // Send a response when done
+  } catch (error) {
+    console.error('Error during voice conversion:', error);
+    res.status(500).send('Error during conversion.'); // Send an error response if needed
+  }
 });
 
 // Saves settings from front end
@@ -211,7 +217,6 @@ async function convertVoice() {
   // TODO: Change based on machine
   finalInputs.push(path.join(__dirname, 'recorded_audio', 'recorded_audio.webm'))
   targetPath = path.join(__dirname, '../RVC-beta', 'RVC-beta0717', 'logs', modelName);
-  // targetPath = path.join('C:/Users/drago/Documents/push-to-talk-website/RVC-beta/RVC-beta0717/logs', modelName);
 
   var indexFile = "";
   indexFile = await findFirstFileWithIndexStartingWithT(targetPath);
@@ -224,10 +229,8 @@ async function convertVoice() {
   // just set it for now
   finalInputs.push('harvest');
   finalInputs.push(path.join(__dirname, 'recorded_audio', 'output_sound.wav'))
-  // finalInputs.push('C:/Users/drago/Documents/push-to-talk-website/push-to-talk/recorded_audio/output_sound.wav');
 
   let pthFile = modelName.concat(".pth");
-  // finalInputs.push(path.join("C:/Users/drago/Documents/push-to-talk-website/RVC-beta/RVC-beta0717/weights", pthFile));\
   finalInputs.push(path.join(__dirname, '../RVC-beta', 'RVC-beta0717', 'weights', pthFile));
   finalInputs.push(indexRate);
   finalInputs.push('cuda:0');
@@ -243,7 +246,7 @@ async function convertVoice() {
 
   // const stringInputs = finalInputs.join(" ");
 
-  runPythonScript(finalInputs);
+  await runPythonScript(finalInputs);
 
 }
 
@@ -268,32 +271,36 @@ function playConvertedAudio() {
 
 // Function to run the Python script with inputs
 function runPythonScript(inputs) {
-  pythonArr = ['convert.py'].concat(inputs);
-  const pythonScript = spawn('python', pythonArr);
+  return new Promise((resolve, reject) => {
+      pythonArr = ['convert.py'].concat(inputs);
+    const pythonScript = spawn('python', pythonArr);
 
-  // Write the inputs to the Python script's stdin
-  pythonScript.stdin.write(inputs.join(' '));
-  pythonScript.stdin.end();
+    // Write the inputs to the Python script's stdin
+    pythonScript.stdin.write(inputs.join(' '));
+    pythonScript.stdin.end();
 
-  // Handle the output from the Python script
-  pythonScript.stdout.on('data', (data) => {
-    console.log(`Python script output: ${data}`);
-    // Process the output from the Python script as needed
-  });
+    // Handle the output from the Python script
+    pythonScript.stdout.on('data', (data) => {
+      console.log(`Python script output: ${data}`);
+      // Process the output from the Python script as needed
+    });
 
-  // Handle any errors from the Python script
-  pythonScript.stderr.on('data', (data) => {
-    console.error(`Python script error: ${data}`);
-  });
+    // Handle any errors from the Python script
+    pythonScript.stderr.on('data', (data) => {
+      console.error(`Python script error: ${data}`);
+    });
 
-  // Handle the script's exit event
-  pythonScript.on('close', (code) => {
-    console.log(`Python script exited with code ${code}`);
-    if (code === 0) {
-      playConvertedAudio();
-      console.log('played converted audio');
-    } else {
-    }
+    // Handle the script's exit event
+    pythonScript.on('close', (code) => {
+      console.log(`Python script exited with code ${code}`);
+      if (code === 0) {
+        playConvertedAudio();
+        console.log('played converted audio');
+        resolve();
+      } else {
+        reject(`Python script exited with code ${code}`);
+      }
+    });
   });
 }
 

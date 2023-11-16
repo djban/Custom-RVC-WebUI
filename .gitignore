@@ -8,3 +8,5 @@ RVC-beta/
 venv/
 
 push-to-talk/node_modules/
+
+recorded_audio/

@@ -15,6 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const submitButton = document.getElementById('submitButton');
   const playbackButton = document.getElementById('playbackButton');
 
+  const scriptStatusElement = document.getElementById('scriptStatus');
+  scriptStatusElement.textContent = 'Script Status: Waiting...';
+
+
 ///////////////
 recordButton.addEventListener('click', startRecording);
 stopButton.addEventListener('click', stopRecording);
@@ -75,12 +79,34 @@ function convertAudio() {
   console.log('convert button pressed');
   if (isRecording) return;
 
-  fetch('/convert') // Send a GET request to the /convert endpoint
-  .then(response => response.text())
-  .then(message => console.log(message))
-  .catch(error => console.error('Error:', error));
-  console.log('finished converting');
+  const scriptStatusElement = document.getElementById('scriptStatus');
+  scriptStatusElement.textContent = 'Script Status: Converting...';
 
+  fetch('/convert') // Send a GET request to the /convert endpoint
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      scriptStatusElement.textContent = 'Script Status: Converted!';
+      console.log('AAAAAAAAAAAAAAAAAAAA');
+      return response.text();
+    })
+    .then(message => {
+      console.log(message);
+
+      // Update the status when the conversion is successful
+      scriptStatusElement.textContent = 'Script Status: Converted!';
+      console.log('AAAAAAAAAAAAAAAAAAAA');
+    })
+    .catch(error => {
+      // Handle errors and update the status accordingly
+      console.error('Error:', error);
+
+      scriptStatusElement.textContent = 'Script Status: Conversion Failed';
+    })
+    .finally(() => {
+      console.log('finished converting');
+    });
 }
 
 function startRecording() {
