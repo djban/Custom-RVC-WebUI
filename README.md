@@ -29,6 +29,8 @@ Ensure that you have node installed as well. Then, inside the `push-to-talk` dir
 ## How to use:
 ![](website_img.png)
 
+Check out this (really scuffed) youtube tutorial [here](https://www.youtube.com/watch?v=OCF72CkB19Y).
+
 This is how the website looks as of 11/7. When you want to record your own voice, click `Start Recording` to start and `Stop Recording` to stop. You'll know when you are recording because there will be a red dot indicating that it is recording.
 
 `Play Audio` lets you listen to what you just recorded.
